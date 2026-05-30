@@ -1,0 +1,99 @@
+<p-toast/>
+
+<div class="p-4">
+  <div class="flex align-items-center gap-3 mb-4">
+    <p-button icon="pi pi-arrow-left" [text]="true" [rounded]="true"
+              (onClick)="goBack()"/>
+    <h2 class="text-2xl font-bold">
+      {{ $isEditing() ? 'Editar Producto' : 'Nuevo Producto' }}
+    </h2>
+  </div>
+
+  <div class="card" style="max-width: 700px;">
+    <form [formGroup]="form">
+      <div class="flex flex-column gap-4">
+
+        <div class="flex gap-4">
+          <div class="flex flex-column gap-1 flex-1">
+            <label class="font-semibold">Nombre</label>
+            <input pInputText formControlName="name" placeholder="Nombre del producto"/>
+            @if (form.get('name')?.invalid && form.get('name')?.touched) {
+              <small class="p-error">El nombre es requerido</small>
+            }
+          </div>
+
+          <div class="flex flex-column gap-1" style="width: 160px;">
+            <label class="font-semibold">Codigo</label>
+            <input pInputText formControlName="code" placeholder="Ej: PRD-001"/>
+            @if (form.get('code')?.invalid && form.get('code')?.touched) {
+              <small class="p-error">El codigo es requerido</small>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-column gap-1">
+          <label class="font-semibold">Descripcion</label>
+          <textarea pTextarea formControlName="description"
+                    placeholder="Descripcion del producto" rows="3"></textarea>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="flex flex-column gap-1 flex-1">
+            <label class="font-semibold">Precio</label>
+            <p-inputnumber
+              formControlName="price"
+              mode="currency"
+              currency="PEN"
+              locale="es-PE"
+              placeholder="0.00"
+            ></p-inputnumber>
+            @if (form.get('price')?.invalid && form.get('price')?.touched) {
+              <small class="p-error">El precio es requerido</small>
+            }
+          </div>
+
+          <div class="flex flex-column gap-1 flex-1">
+            <label class="font-semibold">Stock</label>
+            <p-inputnumber
+              formControlName="stock"
+              [min]="0"
+              placeholder="0"
+            ></p-inputnumber>
+            @if (form.get('stock')?.invalid && form.get('stock')?.touched) {
+              <small class="p-error">El stock es requerido</small>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-column gap-1">
+          <label class="font-semibold">Categoria</label>
+          <p-autocomplete
+            formControlName="category"
+            [suggestions]="$categorySuggestions()"
+            (completeMethod)="searchCategory($event)"
+            optionLabel="name"
+            placeholder="Buscar categoria..."
+            [dropdown]="true"
+          ></p-autocomplete>
+          @if (form.get('category')?.invalid && form.get('category')?.touched) {
+            <small class="p-error">La categoria es requerida</small>
+          }
+        </div>
+
+        <div class="flex align-items-center gap-2">
+          <p-toggleswitch formControlName="isActive"/>
+          <label class="font-semibold">Activo</label>
+        </div>
+
+        <div class="flex justify-content-end gap-2 pt-2">
+          <p-button label="Cancelar" [text]="true" severity="secondary"
+                    (onClick)="goBack()"/>
+          <p-button [label]="$isEditing() ? 'Actualizar' : 'Guardar'"
+                    icon="pi pi-save" (onClick)="submit()"
+                    [disabled]="form.invalid"/>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

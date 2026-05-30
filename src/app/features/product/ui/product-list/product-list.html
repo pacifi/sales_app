@@ -1,1 +1,58 @@
-<p>product-list works!</p>
+<p-toast/>
+
+<div class="p-4">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2 class="text-2xl font-bold">Productos</h2>
+    <div class="flex gap-2">
+      <input pInputText placeholder="Buscar..." (input)="onSearch($event)"/>
+      <p-button label="Nuevo Producto" icon="pi pi-plus" (onClick)="goToCreate()"/>
+    </div>
+  </div>
+
+  <p-table
+    [value]="$products()"
+    [totalRecords]="$totalRecords()"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="size"
+    (onPage)="onPageChange($event)"
+    stripedRows
+  >
+    <ng-template #header>
+      <tr>
+        <th>Codigo</th>
+        <th>Nombre</th>
+        <th>Categoria</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-product>
+      <tr>
+        <td>{{ product.code }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.category.name }}</td>
+        <td>{{ product.price | number:'1.2-2' }}</td>
+        <td>{{ product.stock }}</td>
+        <td>
+          <i class="pi"
+             [class.pi-check-circle]="product.isActive"
+             [class.pi-times-circle]="!product.isActive"></i>
+        </td>
+        <td>
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true"
+                    (onClick)="goToEdit(product)"/>
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true"
+                    severity="danger" (onClick)="delete(product)"/>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #empty>
+      <tr>
+        <td colspan="7" class="text-center p-4">No hay productos registrados</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
