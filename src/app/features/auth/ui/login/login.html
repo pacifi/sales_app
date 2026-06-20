@@ -1,3 +1,5 @@
+<p-toast/>
+
 <p-card class="login-card">
   <ng-template #header>
     <div class="login-header">
@@ -5,18 +7,25 @@
       <p>Sign in to your account</p>
     </div>
   </ng-template>
-
-  <div class="login-form">
+  <div class="login-form" [formGroup]="form">
     <div class="field">
-      <label for="email">Email</label>
-      <input pInputText id="email" type="email" placeholder="email@example.com" />
+      <label for="username">Usuario</label>
+      <input pInputText id="username" formControlName="username" placeholder="Ingresa tu usuario"/>
+      @if (form.get('username')?.invalid && form.get('username')?.touched) {
+        <small class="p-error">El usuario es requerido</small>
+      }
     </div>
-
     <div class="field">
-      <label for="password">Password</label>
-      <p-password id="password" placeholder="Password" [feedback]="false" [toggleMask]="true" />
+      <label for="password">Contraseña</label>
+      <p-password id="password" formControlName="password"
+                  placeholder="Ingresa tu contraseña"
+                  [feedback]="false" [toggleMask]="true"
+                  styleClass="w-full"></p-password>
+      @if (form.get('password')?.invalid && form.get('password')?.touched) {
+        <small class="p-error">La contraseña es requerida</small>
+      }
     </div>
-
-    <p-button label="Sign In" icon="pi pi-sign-in" styleClass="w-full" />
+    <p-button label="Sign In" icon="pi pi-sign-in" styleClass="w-full"
+              (onClick)="submit()" [disabled]="form.invalid"/>
   </div>
 </p-card>
